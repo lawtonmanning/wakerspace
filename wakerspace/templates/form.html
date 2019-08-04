@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="/static/css/form.css">
+{% endblock styles %}
+
+{% block content %}
+<div class="form">
+  <form class="shadow p-3 mb-5 bg-white rounded" method="post" novalidate>
+    {{ form.csrf_token }}
+    <div class="logo">
+      <img src="/static/images/WSLogo.svg">
+    </div>
+    {% block fields %}
+    {% block submit %}
+    <div class="row">
+      <div class="col">
+        <a class="btn btn-secondary btn-block" href="/" type="button">Cancel</a>
+      </div>
+      <div class="col">
+        <button class="btn btn-primary btn-block" type="submit">Submit</button>
+      </div>
+    </div>
+    {% endblock submit %}
+    {% endblock fields %}
+  </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "scan.html" %}
+
+{% block scan %}
+<script>
+  $(document).ready(function() {
+    $('#integer').pincodeInput({inputs:8, hidedigits:false});
+    $('.first').focus();
+  });
+</script>
+{% endblock scan %}
+
+{% block submit %}
+<div class="row">
+  <div class="col">
+    <a class="btn btn-secondary btn-block" href="/" type="button">Cancel</a>
+  </div>
+  <div class="col">
+    <button class="btn btn-primary btn-block" type="submit">Submit</button>
+  </div>
+</div>
+{% endblock submit %}
+

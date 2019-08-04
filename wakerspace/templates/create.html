@@ -1,0 +1,15 @@
+{% extends "form.html" %}
+
+{% block fields %}
+<div class="row">
+  <div class="col">
+    {{ form.first_name(class="form-control", placeholder="First Name") }}
+  </div>
+  <div class="col">
+    {{ form.last_name(class="form-control", placeholder="Last Name") }}
+  </div>
+</div>
+{% block submit %}
+{{ super() }}
+{% endblock submit %}
+{% endblock fields %}
