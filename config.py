@@ -7,3 +7,4 @@ class Config(object):
     CSRF_ENABLED = True
     SECRET_KEY = 'wakerspace'
     SQLALCHEMY_DATABASE_URI = 'mysql://waker:password@localhost/wakerspace'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
