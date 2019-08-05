@@ -18,3 +18,7 @@ class IDForm(FlaskForm):
 class MakerForm(FlaskForm):
     first_name = StringField('First Name')
     last_name = StringField('Last Name')
+
+
+class EditMakerForm(FlaskForm):
+    in_out = SubmitField('in/out')

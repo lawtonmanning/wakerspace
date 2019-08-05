@@ -3,7 +3,7 @@ from datetime import datetime as dt
 from wakerspace import app, db
 from flask import render_template, redirect, request, url_for, session
 
-from wakerspace.forms import IDForm, MakerForm
+from wakerspace.forms import IDForm, MakerForm, EditMakerForm
 from wakerspace.models import Maker, Visit
 
 
@@ -83,6 +83,25 @@ def maker():
 
     role = 'Maker'
 
-    form = MakerForm()
+    form = EditMakerForm()
+
+    if form.validate_on_submit():
+        value = request.form['submit']
+        if value == "Check In/Out":
+            last_visit = Visit.query.filter_by(maker_id=maker.id).order_by(Visit.in_time.desc()).first()
+            if last_visit is None or last_visit.out_time is not None:
+                last_visit = Visit()
+                last_visit.maker_id = maker.id
+                last_visit.in_time = dt.utcnow()
+            else:
+                last_visit.out_time = dt.utcnow()
+            
+            db.session.add(last_visit)
+            db.session.commit()
+            return redirect('/scan')
+
+                
+
+        return value
 
     return render_template('maker.html', form=form, maker=maker, role=role)

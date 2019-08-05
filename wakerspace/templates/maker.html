@@ -1,8 +1,12 @@
 {% extends "form.html" %}
 
 {% block fields %}
-<div class="text-center">
-  <h4>{{ maker.first_name }} {{maker.last_name}}</h4>
-  <h4>{{ role }}</h4>
+<div class="card">
+  <div class="text-center">
+    <h4>{{ maker.first_name }} {{maker.last_name}}</h4>
+    <h4>WakerSpace</h4>
+    <h4>{{ role }}</h4>
+  </div>
 </div>
+<input class="btn btn-primary btn-block" name="submit" type="submit" value="Check In/Out">
 {% endblock fields %}
