@@ -1,0 +1,15 @@
+{% extends "form.html" %}
+
+{% block fields %}
+<div class="text-center">
+  <h4>Trainings</h4>
+  <select class="form-control" id="trainings" name="trainings">
+    {% for training in form.trainings %}
+    {{ training }}
+    {% endfor %}
+  </select>
+</div>
+{% block submit %}
+{{ super() }}
+{% endblock submit %}
+{% endblock fields %}
