@@ -28,7 +28,10 @@
   {{ form.integer }}
 </div>
 {% block submit %}
-<a class="btn btn-secondary btn-block" href="/manual" type="button">Manual Lookup</a>
+<div class="text-center">
+  <h4>OR</h4>
+</div>
+<a class="btn btn-secondary btn-block" href="/manual" type="button">Search by WFU ID</a>
 <input id="submit" type="submit" style="display: none"/>
 {% endblock submit %}
 {% endblock fields %}
