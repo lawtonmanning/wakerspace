@@ -1,5 +1,12 @@
+html,body {
+  height: 100%;
+}
+
 body {
-  margin: 0;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
   background-color: #85754e;
 }
 
@@ -13,10 +20,10 @@ body {
   padding-bottom: 20px;
 }
 
-form {
+.form {
   max-width: 320px;
-  width: 90%;
-  margin: 50 auto;
+  width: 100%;
+  margin: auto;
   padding: 40px;
   border-radius: 4px;
   background: #ffffff;
@@ -28,4 +35,8 @@ form {
 
 .col {
   padding: 5px;
+}
+
+*, ::after, ::before {
+  box-sizing: border-box;
 }
