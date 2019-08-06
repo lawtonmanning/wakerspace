@@ -1,18 +1,20 @@
+import re
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, StringField, SubmitField
-from wtforms.validators import ValidationError
+from wtforms.validators import DataRequired, ValidationError
 
 class IDForm(FlaskForm):
-    integer = IntegerField('pincode')
+    integer = StringField('pincode', [DataRequired()])
 
     def __init__(self, length):
         super().__init__()
         self.length = length
 
     def validate_integer(self, integer):
-        padded = '{{:0{}d}}'.format(self.length)
-        if len(padded.format(integer.data)) != self.length:
+        if len(integer.data) != self.length:
             raise ValidationError("ID must be {} digits long".format(self.length))
+        elif re.match(r'[0-9]+', integer.data) is None:
+            raise ValidationError("ID must only include numbers")
 
 
 class MakerForm(FlaskForm):
