@@ -63,6 +63,7 @@ def create():
     if form.validate_on_submit():
         maker.first_name = form.first_name.data
         maker.last_name = form.last_name.data
+        maker.classification = form.classification.data
 
         db.session.add(maker)
         db.session.commit()

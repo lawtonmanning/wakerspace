@@ -1,7 +1,8 @@
 import re
 from flask_wtf import FlaskForm
-from wtforms import IntegerField, StringField, SubmitField
+from wtforms import IntegerField, StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError
+from wakerspace.models import Maker
 
 class IDForm(FlaskForm):
     integer = StringField('pincode', [DataRequired()])
@@ -18,8 +19,9 @@ class IDForm(FlaskForm):
 
 
 class MakerForm(FlaskForm):
-    first_name = StringField('First Name')
-    last_name = StringField('Last Name')
+    first_name = StringField('First Name', [DataRequired()])
+    last_name = StringField('Last Name', [DataRequired()])
+    classification = SelectField('Classification', [DataRequired()], choices=Maker.Classification.choices())
 
 
 class EditMakerForm(FlaskForm):
