@@ -1,11 +1,29 @@
+from enum import Enum
 from wakerspace import db
+
+class FormEnum(Enum):
+    @classmethod
+    def choices(cls):
+        return [(choice.value, choice.name) for choice in cls]
+
+    @classmethod
+    def coerce(cls, item):
+        return cls(item) if not isinstance(item, cls) else item
+
 
 
 class Maker(db.Model):
+    class Classification(FormEnum):
+        STUDENT = 'STUDENT'
+        FACULTY = 'FACULTY'
+        STAFF = 'STAFF'
+        RESEARCHER = 'RESEARCHER'
+    
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     rfid = db.Column(db.Integer, nullable=True, unique=True)
+    classification = db.Column(db.Enum(Classification), nullable=False)
 
     def __repr__(self):
         return '<Maker id={:08d} first={} last={}></Maker>'.format(self.id, self.first_name, self.last_name)
