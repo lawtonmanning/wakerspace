@@ -13,6 +13,8 @@ class FormEnum(Enum):
 
 
 class Maker(db.Model):
+    __tablename__ = 'maker'
+
     class Classification(FormEnum):
         STUDENT = 'STUDENT'
         FACULTY = 'FACULTY'
@@ -22,16 +24,27 @@ class Maker(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    rfid = db.Column(db.Integer, nullable=True, unique=True)
+    rfid = db.Column(db.Integer, nullable=True, unique=True, default=None)
     classification = db.Column(db.Enum(Classification), nullable=False)
+    staff = db.relationship('Staff', back_populates='maker', uselist=False)
+
+
 
     def __repr__(self):
         return '<Maker id={:08d} first={} last={}></Maker>'.format(self.id, self.first_name, self.last_name)
 
+    def role(self):
+        if self.staff is not None:
+            return 'Staff'
+        return 'Maker'
+
+
 
 class Staff(db.Model):
+    __tablename__ = 'staff'
     maker_id = db.Column(db.Integer, db.ForeignKey('maker.id'), primary_key=True)
-    admin = db.Column(db.Boolean, nullable=False)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
+    maker = db.relationship('Maker', back_populates='staff')
 
 
 class Visit(db.Model):
