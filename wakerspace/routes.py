@@ -89,8 +89,6 @@ def maker():
     if not maker:
         return redirect('/scan')
 
-    role = 'Maker'
-
     form = EditMakerForm()
 
     if form.validate_on_submit():
@@ -112,4 +110,4 @@ def maker():
 
         return value
 
-    return render_template('maker.html', form=form, maker=maker, role=role)
+    return render_template('maker.html', form=form, maker=maker)
