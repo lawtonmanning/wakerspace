@@ -46,6 +46,16 @@ class Maker(db.Model):
             return 'Staff'
         return 'Maker'
 
+    def status(self):
+       last_visit = self.last_visit()
+       if last_visit is None or last_visit.out_time is not None:
+           return "OUT"
+       return "IN"
+
+    def last_visit(self):
+        return Visit.query.filter_by(maker_id=self.id).order_by(Visit.in_time.desc()).first()
+
+
 
 
 class Staff(db.Model):

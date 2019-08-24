@@ -88,26 +88,24 @@ def maker():
     maker = Maker.query.get(session['maker'])
     if not maker:
         return redirect('/scan')
-
+    
     form = EditMakerForm()
 
     if form.validate_on_submit():
         value = request.form['submit']
-        if value == "Check In/Out":
-            last_visit = Visit.query.filter_by(maker_id=maker.id).order_by(Visit.in_time.desc()).first()
-            if last_visit is None or last_visit.out_time is not None:
-                last_visit = Visit()
-                last_visit.maker_id = maker.id
-                last_visit.in_time = dt.utcnow()
-            else:
-                last_visit.out_time = dt.utcnow()
-            
-            db.session.add(last_visit)
+        if value.startswith('Check'):
+            if value == 'Check-In':
+                visit = Visit()
+                visit.maker_id = maker.id
+                visit.in_time = dt.utcnow()
+            elif value == 'Check-Out':
+                visit = maker.last_visit()
+                visit.out_time = dt.utcnow()
+
+            db.session.add(visit)
             db.session.commit()
-            return redirect('/scan')
-
-                
-
+            return redirect('/')
+        
         return value
 
     return render_template('maker.html', form=form, maker=maker)

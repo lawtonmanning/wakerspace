@@ -7,5 +7,9 @@
     <h4>Waker{{ maker.role() }}</h4>
   </div>
 </div>
-<input class="btn btn-primary btn-block" name="submit" type="submit" value="Check In/Out">
+{% if maker.status() == "OUT" %}
+  <input class="btn btn-success btn-block" name="submit" type="submit" value="Check-In">
+{% else %}
+  <input class="btn btn-danger btn-block" name="submit" type="submit" value="Check-Out">
+{% endif %}
 {% endblock fields %}
