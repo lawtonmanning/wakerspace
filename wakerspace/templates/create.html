@@ -27,6 +27,11 @@
 </div>
 {{ form.classification(class="form-control", placeholder="Classification") }}
 {{ form.year(class="form-control", placeholder="Year") }}
+<div class="btn-group-toggle" data-toggle="buttons">
+  <label class="btn btn-secondary btn-block">
+    {{ form.staff() }} WakerStaff
+  </label>
+</div>
 {% block submit %}
 {{ super() }}
 {% endblock submit %}

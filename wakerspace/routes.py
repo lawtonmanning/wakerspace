@@ -4,7 +4,7 @@ from wakerspace import app, db
 from flask import render_template, redirect, request, url_for, session
 
 from wakerspace.forms import IDForm, MakerForm, EditMakerForm
-from wakerspace.models import Maker, Visit
+from wakerspace.models import Maker, Staff, Visit
 
 
 @app.route('/')
@@ -68,6 +68,11 @@ def create():
             maker.year = form.year.data
 
         db.session.add(maker)
+        if form.staff.data:
+            staff = Staff()
+            staff.maker_id = maker.id
+            db.session.add(staff)
+
         db.session.commit()
 
         session['maker'] = maker.id

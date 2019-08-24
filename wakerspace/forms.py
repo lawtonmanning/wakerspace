@@ -23,6 +23,7 @@ class MakerForm(FlaskForm):
     last_name = StringField('Last Name', [DataRequired()])
     classification = SelectField('Classification', [DataRequired()], choices=Maker.Classification.choices())
     year = SelectField('Year', choices=Maker.Year.choices())
+    staff = BooleanField('Staff')
 
 class EditMakerForm(FlaskForm):
     in_out = SubmitField('in/out')
