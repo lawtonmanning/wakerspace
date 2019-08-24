@@ -20,12 +20,20 @@ class Maker(db.Model):
         FACULTY = 'FACULTY'
         STAFF = 'STAFF'
         RESEARCHER = 'RESEARCHER'
+
+    class Year(FormEnum):
+        FRESHMAN = 'FRESHMAN'
+        SOPHOMORE = 'SOPHOMORE'
+        JUNIOR = 'JUNIOR'
+        SENIOR = 'SENIOR'
+        GRADUATE = 'GRADUATE'
     
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     rfid = db.Column(db.Integer, nullable=True, unique=True, default=None)
     classification = db.Column(db.Enum(Classification), nullable=False)
+    year = db.Column(db.Enum(Year), nullable=True)
     staff = db.relationship('Staff', back_populates='maker', uselist=False)
 
 

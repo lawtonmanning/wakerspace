@@ -1,5 +1,21 @@
 {% extends "form.html" %}
 
+{% block scripts %}
+  <script>
+    $(document).ready(function() {
+      $('#classification').change(function() {
+        selected = $(this).children("option:selected").val();
+        switch(selected) {
+          case "STUDENT":
+            $('#year').show();
+            break;
+          default:
+            $('#year').hide();
+        }
+      });
+    });
+  </script>
+{% endblock scripts %}
 {% block fields %}
 <div class="row">
   <div class="col">
@@ -10,6 +26,7 @@
   </div>
 </div>
 {{ form.classification(class="form-control", placeholder="Classification") }}
+{{ form.year(class="form-control", placeholder="Year") }}
 {% block submit %}
 {{ super() }}
 {% endblock submit %}

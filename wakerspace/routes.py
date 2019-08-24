@@ -64,6 +64,8 @@ def create():
         maker.first_name = form.first_name.data
         maker.last_name = form.last_name.data
         maker.classification = form.classification.data
+        if form.classification.data == 'STUDENT':
+            maker.year = form.year.data
 
         db.session.add(maker)
         db.session.commit()
