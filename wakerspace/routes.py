@@ -1,10 +1,11 @@
 from datetime import datetime as dt
+from datetime import date as d
 
 from wakerspace import app, db
 from flask import render_template, redirect, request, url_for, session
 
-from wakerspace.forms import IDForm, MakerForm, EditMakerForm
-from wakerspace.models import Maker, Staff, Visit
+from wakerspace.forms import IDForm, MakerForm, EditMakerForm, TrainingsForm
+from wakerspace.models import Maker, Staff, Visit, Training, Room, Equipment
 
 
 @app.route('/')
@@ -90,22 +91,71 @@ def maker():
         return redirect('/scan')
     
     form = EditMakerForm()
+    
+    num_cols = len(Room.query.all())
 
     if form.validate_on_submit():
         value = request.form['submit']
+        direct = '/'
         if value.startswith('Check'):
             if value == 'Check-In':
                 visit = Visit()
                 visit.maker_id = maker.id
                 visit.in_time = dt.utcnow()
+                direct = '/in'
             elif value == 'Check-Out':
                 visit = maker.last_visit()
                 visit.out_time = dt.utcnow()
 
             db.session.add(visit)
             db.session.commit()
-            return redirect('/')
         
-        return value
+        elif value == 'Add Training':
+            direct = '/trainings' 
+        
+        return redirect(direct)
 
-    return render_template('maker.html', form=form, maker=maker)
+    return render_template('maker.html', form=form, maker=maker, num_cols=num_cols)
+
+@app.route('/in', methods=['GET', 'POST'])
+def insomething():
+    if 'maker' not in session:
+        return redirect('/scan')
+
+    maker = Maker.query.get(session['maker'])
+    if not maker:
+        return redirect('/scan')
+
+    return 'FIXME: ADD CHECK-IN FORM'
+
+@app.route('/trainings', methods=['GET', 'POST'])
+def trainings():
+    if 'maker' not in session:
+        return redirect('/scan')
+
+    maker = Maker.query.get(session['maker'])
+    if not maker:
+        return redirect('/scan')
+
+    form = TrainingsForm()
+    trainings = Equipment.query.all()
+    for training in maker.trainings:
+        trainings.remove(training.equipment)
+
+    if not trainings:
+        return redirect('/maker')
+
+    form.trainings.choices = [(t.id, t.type) for t in trainings]
+
+    if form.validate_on_submit():
+        training = Training()
+        training.maker_id = maker.id
+        training.equipment_id = form.trainings.data
+        training.date = d.today()
+
+        db.session.add(training)
+        db.session.commit()
+        return redirect('/maker')
+
+    return render_template('trainings.html', form=form, maker=maker)
+

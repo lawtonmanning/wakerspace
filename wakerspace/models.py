@@ -35,11 +35,12 @@ class Maker(db.Model):
     classification = db.Column(db.Enum(Classification), nullable=False)
     year = db.Column(db.Enum(Year), nullable=True)
     staff = db.relationship('Staff', back_populates='maker', uselist=False)
+    trainings = db.relationship('Training')
 
 
 
     def __repr__(self):
-        return '<Maker id={:08d} first={} last={}></Maker>'.format(self.id, self.first_name, self.last_name)
+        return '{} {} ({:08d})'.format(self.first_name, self.last_name, self.id)
 
     def role(self):
         if self.staff is not None:
@@ -78,16 +79,25 @@ class Training(db.Model):
     maker_id = db.Column(db.Integer, db.ForeignKey('maker.id'), primary_key=True)
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.id'), primary_key=True)
     date = db.Column(db.Date, nullable=False)
+    equipment = db.relationship('Equipment')
 
 
 class Equipment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     type = db.Column(db.String(50), nullable=False, unique=True)
-    room = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+    room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
+    room = db.relationship('Room', back_populates='equipment')
+
+
 
 
 class Room(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     color = db.Column(db.String(6), nullable=False, unique=True)
+    color_name = db.Column(db.String(50), nullable=False, unique=True)
+    equipment = db.relationship('Equipment', back_populates='room')
+
+    def __repr__(self):
+        return self.color_name
 
 

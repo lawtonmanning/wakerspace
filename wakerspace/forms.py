@@ -2,7 +2,7 @@ import re
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, IntegerField, StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError
-from wakerspace.models import Maker
+from wakerspace.models import Maker, Equipment
 
 class IDForm(FlaskForm):
     integer = StringField('pincode', [DataRequired()])
@@ -27,3 +27,11 @@ class MakerForm(FlaskForm):
 
 class EditMakerForm(FlaskForm):
     in_out = SubmitField('in/out')
+
+
+class CheckInForm(FlaskForm):
+    test = SubmitField('test')
+
+class TrainingsForm(FlaskForm):
+    trainings = SelectField('Training', [DataRequired()], choices=[(t.id, t.type) for t in Equipment.query.all()], coerce=int)
+    submit = SubmitField('Submit')

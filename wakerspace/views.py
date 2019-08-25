@@ -1,5 +1,7 @@
 from wakerspace import admin, db
-from wakerspace.models import Maker
+import wakerspace.models as model
 from flask_admin.contrib.sqla import ModelView
 
-admin.add_view(ModelView(Maker, db.session))
+admin.add_view(ModelView(model.Equipment, db.session))
+admin.add_view(ModelView(model.Room, db.session))
+admin.add_view(ModelView(model.Training, db.session))
