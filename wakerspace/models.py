@@ -34,8 +34,9 @@ class Maker(db.Model):
     rfid = db.Column(db.Integer, nullable=True, unique=True, default=None)
     classification = db.Column(db.Enum(Classification), nullable=False)
     year = db.Column(db.Enum(Year), nullable=True)
-    staff = db.relationship('Staff', back_populates='maker', uselist=False)
-    trainings = db.relationship('Training')
+    staff = db.Column(db.Boolean, nullable=False, default=False)
+    trainings = db.relationship('Training', cascade='save-update, merge, delete')
+    visits = db.relationship('Visit', cascade='save-update, merge, delete')
 
 
 
@@ -43,7 +44,7 @@ class Maker(db.Model):
         return '{} {} ({:08d})'.format(self.first_name, self.last_name, self.id)
 
     def role(self):
-        if self.staff is not None:
+        if self.staff:
             return 'Staff'
         return 'Maker'
 
@@ -59,13 +60,6 @@ class Maker(db.Model):
 
 
 
-class Staff(db.Model):
-    __tablename__ = 'staff'
-    maker_id = db.Column(db.Integer, db.ForeignKey('maker.id'), primary_key=True)
-    admin = db.Column(db.Boolean, nullable=False, default=False)
-    maker = db.relationship('Maker', back_populates='staff')
-
-
 class Visit(db.Model):
     maker_id = db.Column(db.Integer, db.ForeignKey('maker.id'), primary_key=True)
     in_time = db.Column(db.DateTime, primary_key=True)
@@ -76,7 +70,8 @@ class Visit(db.Model):
     equipment = db.relationship('Equipment')
 
     def __repr__(self):
-        return '<Visit maker={:08d} in={} out={}></Maker>'.format(self.maker_id, self.in_time, self.out_time)
+        return '{} ({}, {})'.format(self.maker, self.in_time, self.out_time)
+
 
 
 class Training(db.Model):
@@ -87,12 +82,19 @@ class Training(db.Model):
     maker = db.relationship('Maker')
     equipment = db.relationship('Equipment')
 
+    def __repr__(self):
+        return '{} - {} ({})'.format(self.maker, self.equipment, self.date)
+
 
 class Equipment(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     type = db.Column(db.String(50), nullable=False, unique=True)
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
     room = db.relationship('Room', back_populates='equipment')
+    usable = db.Column(db.Boolean, nullable=False)
+
+    def __repr__(self):
+        return self.type
 
 
 

@@ -5,7 +5,7 @@ from wakerspace import app, db
 from flask import render_template, redirect, request, url_for, session
 
 from wakerspace.forms import IDForm, MakerForm, EditMakerForm, TrainingsForm, CheckInForm
-from wakerspace.models import Maker, Staff, Visit, Training, Room, Equipment
+from wakerspace.models import Maker, Visit, Training, Room, Equipment
 
 
 @app.route('/')
@@ -49,7 +49,7 @@ def manual():
         else:
             return redirect('/create')
 
-    return render_template('manual.html', form=form, label="WFU ID")
+    return render_template('manual.html', form=form, label="WFU ID", cancel='/')
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
@@ -68,18 +68,21 @@ def create():
         if form.classification.data == 'STUDENT':
             maker.year = form.year.data
 
-        db.session.add(maker)
-        if form.staff.data:
-            staff = Staff()
-            staff.maker_id = maker.id
-            db.session.add(staff)
+        maker.staff = form.staff.data
+        if maker.staff:
+            staff_training = Training()
+            staff_training.maker_id = maker.id
+            staff_training.equipment_id = Equipment.query.filter_by(type='Staff').first().id
+            staff_training.date = d.today()
+            db.session.add(staff_training)
 
+        db.session.add(maker)
         db.session.commit()
 
         session['maker'] = maker.id
         return redirect('/maker')
     
-    return render_template('create.html', form=form)
+    return render_template('create.html', form=form, cancel='/')
 
 @app.route('/maker', methods=['GET', 'POST'])
 def maker():
@@ -124,7 +127,14 @@ def insomething():
 
     
     form = CheckInForm()
-    form.purpose.choices = [(t.equipment.id, t.equipment.type) for t in maker.trainings]
+    choices = []
+    for training in maker.trainings:
+        equipment = training.equipment
+        if equipment.usable:
+            choices.append((equipment.id, equipment.type))
+
+    form.purpose.choices = choices
+
 
     if form.validate_on_submit():
         visit = Visit()
@@ -137,7 +147,7 @@ def insomething():
 
         return redirect('/maker')
 
-    return render_template('in.html', form=form, maker=maker)
+    return render_template('in.html', form=form, maker=maker, cancel='/maker')
 
 
 @app.route('/trainings', methods=['GET', 'POST'])
@@ -169,5 +179,5 @@ def trainings():
         db.session.commit()
         return redirect('/maker')
 
-    return render_template('trainings.html', form=form, maker=maker)
+    return render_template('trainings.html', form=form, maker=maker, cancel='/maker')
 
