@@ -70,6 +70,10 @@ class Visit(db.Model):
     maker_id = db.Column(db.Integer, db.ForeignKey('maker.id'), primary_key=True)
     in_time = db.Column(db.DateTime, primary_key=True)
     out_time = db.Column(db.DateTime, nullable=True)
+    purpose = db.Column(db.Integer, db.ForeignKey('equipment.id'), nullable=False)
+
+    maker = db.relationship('Maker')
+    equipment = db.relationship('Equipment')
 
     def __repr__(self):
         return '<Visit maker={:08d} in={} out={}></Maker>'.format(self.maker_id, self.in_time, self.out_time)
@@ -79,6 +83,8 @@ class Training(db.Model):
     maker_id = db.Column(db.Integer, db.ForeignKey('maker.id'), primary_key=True)
     equipment_id = db.Column(db.Integer, db.ForeignKey('equipment.id'), primary_key=True)
     date = db.Column(db.Date, nullable=False)
+
+    maker = db.relationship('Maker')
     equipment = db.relationship('Equipment')
 
 

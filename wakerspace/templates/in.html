@@ -1,0 +1,15 @@
+{% extends "form.html" %}
+
+{% block fields %}
+<div class="text-center">
+  <h4>What is {{maker.first_name}} doing today?</h4>
+  <select class="form-control" id="purpose" name="purpose">
+    {% for option in form.purpose %}
+    {{ option }}
+    {% endfor %}
+  </select>
+</div>
+{% block submit %}
+{{ super() }}
+{% endblock submit %}
+{% endblock fields %}

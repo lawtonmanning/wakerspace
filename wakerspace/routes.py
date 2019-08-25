@@ -4,7 +4,7 @@ from datetime import date as d
 from wakerspace import app, db
 from flask import render_template, redirect, request, url_for, session
 
-from wakerspace.forms import IDForm, MakerForm, EditMakerForm, TrainingsForm
+from wakerspace.forms import IDForm, MakerForm, EditMakerForm, TrainingsForm, CheckInForm
 from wakerspace.models import Maker, Staff, Visit, Training, Room, Equipment
 
 
@@ -99,16 +99,12 @@ def maker():
         direct = '/'
         if value.startswith('Check'):
             if value == 'Check-In':
-                visit = Visit()
-                visit.maker_id = maker.id
-                visit.in_time = dt.utcnow()
                 direct = '/in'
             elif value == 'Check-Out':
                 visit = maker.last_visit()
                 visit.out_time = dt.utcnow()
-
-            db.session.add(visit)
-            db.session.commit()
+                db.session.add(visit)
+                db.session.commit()
         
         elif value == 'Add Training':
             direct = '/trainings' 
@@ -126,7 +122,23 @@ def insomething():
     if not maker:
         return redirect('/scan')
 
-    return 'FIXME: ADD CHECK-IN FORM'
+    
+    form = CheckInForm()
+    form.purpose.choices = [(t.equipment.id, t.equipment.type) for t in maker.trainings]
+
+    if form.validate_on_submit():
+        visit = Visit()
+        visit.maker_id = maker.id
+        visit.in_time = dt.utcnow()
+        visit.purpose = form.purpose.data
+
+        db.session.add(visit)
+        db.session.commit()
+
+        return redirect('/maker')
+
+    return render_template('in.html', form=form, maker=maker)
+
 
 @app.route('/trainings', methods=['GET', 'POST'])
 def trainings():

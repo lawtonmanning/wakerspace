@@ -30,8 +30,9 @@ class EditMakerForm(FlaskForm):
 
 
 class CheckInForm(FlaskForm):
-    test = SubmitField('test')
+    purpose = SelectField('Purpose', [DataRequired()], coerce=int)
+    submit = SubmitField('Check-In')
 
 class TrainingsForm(FlaskForm):
-    trainings = SelectField('Training', [DataRequired()], choices=[(t.id, t.type) for t in Equipment.query.all()], coerce=int)
+    trainings = SelectField('Training', [DataRequired()], choices=[], coerce=int)
     submit = SubmitField('Submit')

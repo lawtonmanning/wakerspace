@@ -7,11 +7,9 @@
     <h4>Waker{{ maker.role() }}</h4>
   </div>
 </div>
-<div class="row">
   {% set num_trainings = maker.trainings|length %}
-  {% set diameter = 280/num_cols %}
+  {% set diameter = 290/num_cols %}
   {% for col in range(num_cols) %}
-  <div class="col"
     <svg height={{ diameter }} width={{ diameter }}>
       <circle cx={{diameter/2}} cy={{diameter/2}} r={{diameter/2}} 
               {% if col < num_trainings %}
@@ -21,9 +19,7 @@
               {% endif %}
       />
     </svg>
-  </div>
   {% endfor %}
-</div>
 <div class="row">
   <div class="col">
     {% if maker.status() == "OUT" %}
@@ -32,8 +28,13 @@
       <input class="btn btn-danger btn-block" name="submit" type="submit" value="Check-Out">
     {% endif %}
   </div>
+</div>
+<div class="row">
   <div class="col">
     <input class="btn btn-secondary btn-block" name="submit" type="submit" value="Add Training">
+  </div>
+  <div class="col">
+    <a class="btn btn-info btn-block" href="/" type="button">Cancel</a>
   </div>
 </div>
 {% endblock fields %}
