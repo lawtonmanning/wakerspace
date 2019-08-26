@@ -132,15 +132,17 @@ def insomething():
         equipment = training.equipment
         if equipment.usable:
             choices.append((equipment.id, equipment.type))
-
+    
+    choices.append((0, 'Other'))
     form.purpose.choices = choices
-
 
     if form.validate_on_submit():
         visit = Visit()
         visit.maker_id = maker.id
         visit.in_time = dt.utcnow()
         visit.purpose = form.purpose.data
+        if not visit.purpose:
+            visit.purpose = None
 
         db.session.add(visit)
         db.session.commit()

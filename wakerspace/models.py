@@ -35,8 +35,8 @@ class Maker(db.Model):
     classification = db.Column(db.Enum(Classification), nullable=False)
     year = db.Column(db.Enum(Year), nullable=True)
     staff = db.Column(db.Boolean, nullable=False, default=False)
-    trainings = db.relationship('Training', cascade='save-update, merge, delete')
-    visits = db.relationship('Visit', cascade='save-update, merge, delete')
+    trainings = db.relationship('Training', cascade='save-update, merge, delete, delete-orphan')
+    visits = db.relationship('Visit', cascade='save-update, merge, delete, delete-orphan')
 
 
 
@@ -64,7 +64,7 @@ class Visit(db.Model):
     maker_id = db.Column(db.Integer, db.ForeignKey('maker.id'), primary_key=True)
     in_time = db.Column(db.DateTime, primary_key=True)
     out_time = db.Column(db.DateTime, nullable=True)
-    purpose = db.Column(db.Integer, db.ForeignKey('equipment.id'), nullable=False)
+    purpose = db.Column(db.Integer, db.ForeignKey('equipment.id'), nullable=True)
 
     maker = db.relationship('Maker')
     equipment = db.relationship('Equipment')

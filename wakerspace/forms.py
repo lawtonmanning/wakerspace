@@ -1,7 +1,7 @@
 import re
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, IntegerField, StringField, SubmitField, SelectField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, ValidationError, InputRequired
 from wakerspace.models import Maker, Equipment
 
 class IDForm(FlaskForm):
@@ -30,7 +30,7 @@ class EditMakerForm(FlaskForm):
 
 
 class CheckInForm(FlaskForm):
-    purpose = SelectField('Purpose', [DataRequired()], coerce=int)
+    purpose = SelectField('Purpose', [InputRequired()], coerce=int)
     submit = SubmitField('Check-In')
 
 class TrainingsForm(FlaskForm):
