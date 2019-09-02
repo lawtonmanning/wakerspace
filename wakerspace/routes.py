@@ -5,7 +5,7 @@ from wakerspace import app, db
 from flask import render_template, redirect, request, url_for, session
 
 from wakerspace.forms import IDForm, MakerForm, EditMakerForm, TrainingsForm, CheckInForm
-from wakerspace.models import Maker, Visit, Training, Room, Equipment
+from wakerspace.models import Maker, Visit, Training, TrainingType
 
 
 @app.route('/')
@@ -69,12 +69,6 @@ def create():
             maker.year = form.year.data
 
         maker.staff = form.staff.data
-        if maker.staff:
-            staff_training = Training()
-            staff_training.maker_id = maker.id
-            staff_training.equipment_id = Equipment.query.filter_by(type='Staff').first().id
-            staff_training.date = d.today()
-            db.session.add(staff_training)
 
         db.session.add(maker)
         db.session.commit()
@@ -95,7 +89,7 @@ def maker():
     
     form = EditMakerForm()
     
-    num_cols = len(Room.query.all())
+    num_cols = len(TrainingType.query.all())
 
     if form.validate_on_submit():
         value = request.form['submit']
@@ -129,9 +123,8 @@ def insomething():
     form = CheckInForm()
     choices = []
     for training in maker.trainings:
-        equipment = training.equipment
-        if equipment.usable:
-            choices.append((equipment.id, equipment.type))
+        for activity in training.type.activities:
+            choices.append((activity.id, activity.name))
     
     choices.append((0, 'Other'))
     form.purpose.choices = choices
@@ -162,19 +155,20 @@ def trainings():
         return redirect('/scan')
 
     form = TrainingsForm()
-    trainings = Equipment.query.all()
+
+    trainings = TrainingType.query.all()
     for training in maker.trainings:
-        trainings.remove(training.equipment)
+        trainings.remove(training.type)
 
     if not trainings:
         return redirect('/maker')
 
-    form.trainings.choices = [(t.id, t.type) for t in trainings]
+    form.trainings.choices = [(t.id, t.name) for t in trainings]
 
     if form.validate_on_submit():
         training = Training()
         training.maker_id = maker.id
-        training.equipment_id = form.trainings.data
+        training.training_type_id  = form.trainings.data
         training.date = d.today()
 
         db.session.add(training)

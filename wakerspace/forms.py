@@ -2,7 +2,7 @@ import re
 from flask_wtf import FlaskForm
 from wtforms import BooleanField, IntegerField, StringField, SubmitField, SelectField
 from wtforms.validators import DataRequired, ValidationError, InputRequired
-from wakerspace.models import Maker, Equipment
+from wakerspace.models import Maker
 
 class IDForm(FlaskForm):
     integer = StringField('pincode', [DataRequired()])

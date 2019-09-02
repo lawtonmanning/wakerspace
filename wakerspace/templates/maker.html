@@ -13,7 +13,7 @@
     <svg height={{ diameter }} width={{ diameter }}>
       <circle cx={{diameter/2}} cy={{diameter/2}} r={{diameter/2}} 
               {% if col < num_trainings %}
-                fill="#{{maker.trainings[col].equipment.room.color}}"
+                fill="#{{maker.trainings[col].type.color.value}}"
               {% else %}
                 fill="#000000" visibility="hidden"
               {% endif %}
