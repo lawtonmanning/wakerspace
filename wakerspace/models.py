@@ -86,8 +86,8 @@ class Training(db.Model):
 
 class TrainingType(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    color_id = db.Column(db.Integer, db.ForeignKey('color.id'), nullable=False)
+    name = db.Column(db.String(50), nullable=False, unique=True)
+    color_id = db.Column(db.Integer, db.ForeignKey('color.id'), nullable=False, unique=True)
 
     activities = db.relationship('Activity')
     color = db.relationship('Color')
