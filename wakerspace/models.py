@@ -81,7 +81,7 @@ class Training(db.Model):
     type = db.relationship('TrainingType')
 
     def __repr__(self):
-        return '{} - {} ({})'.format(self.maker, self.equipment, self.date)
+        return '{} - {} ({})'.format(self.maker, self.type, self.date)
 
 
 class TrainingType(db.Model):
