@@ -7,31 +7,26 @@
     <h4>Waker{{ maker.role() }}</h4>
   </div>
 </div>
-  {% set num_trainings = maker.trainings|length %}
-  {% if num_cols > 0 %}
-  {% set diameter = 250/num_cols %}
-  <div class="row">
+{% set num_trainings = maker.trainings|length %}
+{% if num_cols > 0 %}
+{% set diameter = 250/num_cols %}
+<div class="row">
   {% for col in range(num_cols) %}
-    <div style="margin:5">
+  <div style="margin:5">
     <svg height={{ diameter }} width={{ diameter }}>
-      <circle cx={{diameter/2}} cy={{diameter/2}} r={{diameter/2}} 
-              {% if col < num_trainings %}
-                fill="#{{maker.trainings[col].type.color.value}}"
-              {% else %}
-                fill="#000000" visibility="hidden"
-              {% endif %}
-      />
+      <circle cx={{diameter/2}} cy={{diameter/2}} r={{diameter/2}} {% if col < num_trainings %}
+        fill="#{{maker.trainings[col].type.color.value}}" {% else %} fill="#000000" visibility="hidden" {% endif %} />
     </svg>
-    </div>
+  </div>
   {% endfor %}
 </div>
-  {% endif %}
+{% endif %}
 <div class="row">
   <div class="col">
     {% if maker.status() == "OUT" %}
-      <input class="btn btn-success btn-block" name="submit" type="submit" value="Check-In">
+    <input class="btn btn-success btn-block" name="submit" type="submit" value="Check-In">
     {% else %}
-      <input class="btn btn-danger btn-block" name="submit" type="submit" value="Check-Out">
+    <input class="btn btn-danger btn-block" name="submit" type="submit" value="Check-Out">
     {% endif %}
   </div>
 </div>
