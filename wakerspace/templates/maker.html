@@ -8,6 +8,7 @@
   </div>
 </div>
   {% set num_trainings = maker.trainings|length %}
+  {% if num_cols > 1 %}
   {% set diameter = 290/num_cols %}
   {% for col in range(num_cols) %}
     <svg height={{ diameter }} width={{ diameter }}>
@@ -20,6 +21,7 @@
       />
     </svg>
   {% endfor %}
+  {% endif %}
 <div class="row">
   <div class="col">
     {% if maker.status() == "OUT" %}
